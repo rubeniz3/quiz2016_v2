@@ -3,12 +3,19 @@ var models = require('../models');
 
 // GET /quizzes
 exports.index = function(req, res, next) {
-  models.Quiz.findAll().then(function(quizzes) {
-    res.render('quizzes/index.ejs', {quizzes: quizzes});
+  var search = req.query.search || "";
+  if (search ===""){
+    models.Quiz.findAll().then(function(quizzes) {
+     res.render('quizzes/index.ejs', {quizzes: quizzes});
   })
-  .catch(function(error) { next(error); });
-};
-
+    .catch(function(error) { next(error); });
+  } else {
+    models.Quiz.findAll({where: {question: {$like: "%"+search+"%"}}}).then(function(quizzes) {
+      res.render('quizzes/index.ejs', {quizzes: quizzes});
+  })
+    .catch(function(error) { next(error); });
+  }
+}
 
 // GET /quizzes/:id
 exports.show = function(req, res, next) {
