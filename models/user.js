@@ -14,7 +14,8 @@ module.exports = function (sequelize, DataTypes) {
                           //String aleatorio usado como salt.
                           this.salt = Math.round((new Date().valueOf()*Math.random()))+'';
                           this.setDataValue('password', encryptPassword(password, this.salt));
-    },
+		}    
+	},
       salt: { 	  type: DataTypes.STRING
     },
     isAdmin: {    type: DataTypes.BOOLEAN, defaultValue: false
@@ -27,5 +28,5 @@ module.exports = function (sequelize, DataTypes) {
  * Mezcla un password en claro con el salt proporcionado, ejecuta un SHA1 digest, y devuelve 40 caracteres hexadecimales.
  */
 function encryptPassword(password, salt){
-    return crypto.createHmac('sha1', salt).update(password).digest('hex';
+    return crypto.createHmac('sha1', salt).update(password).digest('hex');
 };
