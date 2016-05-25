@@ -10,6 +10,7 @@
   <%= user.isAdmin ? "Si" : "No" %>
 </p>
 
+<% if (session.user) { %>
 <p>
   <a href="/users/<%= user.id %>?_method=DELETE">
     <button type="button" onClick="return confirm('Borrar cuenta: <%= user.username %>');">
@@ -17,6 +18,7 @@
     </button>
   </a>
 </p>
+<% } %>
 
 <a href="/users">
   <button type="button">Volver</button>
