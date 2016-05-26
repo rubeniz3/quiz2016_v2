@@ -11,6 +11,7 @@ Búsqueda: <input type="text" name="search" value="" placeholder="Introduzca su 
       </td>
       
       <% if (session.user) { %>
+        <% if (session.user.isAdmin || session.user.id === quizzes[i].AuthorId) { %>
         <td>
           <a href="/quizzes/<%= quizzes[i].id %>/edit"><button>Editar</button></a>
         </td>
@@ -20,6 +21,7 @@ Búsqueda: <input type="text" name="search" value="" placeholder="Introduzca su 
          <button>Borrar</button></a>
         </td>
       <% } %>
+    <% } %>
     </tr>
   <% } %>
 </table>
