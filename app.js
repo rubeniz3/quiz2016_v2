@@ -75,3 +75,15 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+
+// En produccon (Heroku) redirijo las peticiones http a https.
+if (app.get('env') === 'production') {
+    app.use(function(req, res, next) {
+      if (req.headers['x-forwarded-proto'] !== 'https') {
+	  res.redirect('https://' + req.get('Host') + req.url);
+      } else {
+          next();
+      }
+    });
+}
