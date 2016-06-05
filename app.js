@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var sessionController = require('./controllers/session_controller');
 
 var session = require('express-session');
 var partials = require('express-partials');
@@ -40,7 +41,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/', routes);
+app.use('/', sessionController.autologout, routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

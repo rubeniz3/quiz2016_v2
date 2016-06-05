@@ -47,6 +47,29 @@ exports.adminAndNotMyselfRequired = function(req, res, next) {
 	}
 };
 
+// MW que controla que la sesión expire a los 2 minutos de inactividad
+exports.autologout = function(req, res, next) {
+	
+	if (req.session.user) {
+        	var horaInicio		= req.session.user.horaInicio;
+		var horaActual		= (new Date()).getTime();
+
+        	if ( (horaActual - horaInicio) < 120000) {
+	        	req.session.user.horaInicio = (new Date()).getTime();
+		        next();
+		} else {
+			delete req.session.user;
+			console.log('Su sesión ha expirado');
+	        	res.redirect("/session"); 
+		}
+	} else {
+	  next();
+	}
+};
+		
+ 	
+
+	
 
 /*
  * Autenticar un usuario: Comprueba si el usuario está registrado en users
@@ -86,7 +109,7 @@ exports.create = function(req, res, next) {
 
    authenticate(login, password).then(function(user) {
 	if (user) {
-		req.session.user = {id:user.id, username:user.username, isAdmin: user.isAdmin};
+		req.session.user = {id:user.id, username:user.username, isAdmin: user.isAdmin, horaInicio: (new Date()).getTime()};
 		res.redirect(redir);  // Redireccionamos a redir
 	} else {
 		req.flash('error', 'La autenticación ha fallado. Inténtelo otra vez.');
